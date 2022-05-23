@@ -2,11 +2,13 @@
  * List of Tauri commands related to library management
  */
 use futures::stream::{self, StreamExt};
+use futures::Future;
 use id3::{Tag, TagLike};
+use std::time::Instant;
 use tauri::{api, Manager, State, Window};
 
 use crate::constants;
-use crate::lib::db;
+use crate::lib::db::{self, insert_track};
 use crate::lib::fs_utils;
 use crate::lib::structs::{AppState, Document, NumberOf, Track};
 
@@ -29,10 +31,13 @@ pub async fn scan(
 
     let task_count = paths.len();
 
+    // Let's get all tracks ID3
     info!("Importing {} files...", task_count);
+    let id3_start_time = Instant::now();
 
-    let scan_stream = stream::iter(paths);
-    let future = scan_stream.for_each_concurrent(SCAN_CONCURRENCY, |path| async {
+    let mut tracks: Vec<Track> = vec![];
+
+    for path in paths {
         let result = Tag::read_from_path(&path);
         let saved_path = path.to_string(); // Why do I need to copy this?
 
@@ -53,26 +58,38 @@ pub async fn scan(
                 path,
             };
 
-            let insertion_result = db::insert_track(&state.db.tracks, track).await;
+            tracks.push(track)
+            // let insertion_result = db::insert_track(&state.db.tracks, track).await;
 
-            if insertion_result.is_err() {
-                info!("Could not insert track from file {}", saved_path);
-            }
+            // if insertion_result.is_err() {
+            //     warn!("Could not insert track from file {}", saved_path);
+            // }
         } else {
-            println!("Failed to get ID3 tags for file {}", saved_path);
+            warn!("Failed to get ID3 tags for file {}", saved_path);
         }
-    });
+    }
+    let id3_duration = id3_start_time.elapsed();
+    info!("{} tracks succesfully scanned", tracks.len());
+    info!("Scanned all id3 tags: {:.2?}", id3_duration);
+
+    let db_start_time = Instant::now();
+    // SLOW, WHY?
+    // let scan_stream = stream::iter(tracks);
+    // let future = scan_stream.for_each_concurrent(SCAN_CONCURRENCY, |track| async {
+    for track in tracks {
+        let insertion_result = db::insert_track(&state.db.tracks, track).await;
+
+        if insertion_result.is_err() {
+            warn!("Could not insert track from file");
+        }
+    }
+    // });
 
     // Start scanning!
-    future.await;
+    // future.await;
 
-    let app_handle = window.app_handle();
-    let app_config = app_handle.config();
-
-    info!(
-        "TODO: store now this metadata in {:#?}",
-        api::path::app_dir(&app_config)
-    );
+    let db_duration = db_start_time.elapsed();
+    info!("Inserted all documents: {:.2?}", db_duration);
 
     let tracks = db::get_all_tracks(&state.db.tracks).await.unwrap();
 

@@ -10,9 +10,11 @@ const ViewLibrary: Component = () => {
   return (
     <div class={styles.tracks}>
       <Show when={tracks.length === 0}>Nothing here yet!</Show>
+      <div>Tracks amount: {tracks.length}</div>
       <For each={tracks}>
         {(track, index) => (
           <div
+            tabIndex={0}
             onPointerDown={(e) => {
               e.preventDefault();
               if (selected().has(index())) {
@@ -28,8 +30,7 @@ const ViewLibrary: Component = () => {
               [styles.track_selected]: selected().has(index()),
             }}
           >
-            {track.id}
-            {track.doc.title}
+            {track.id} {track.doc.title}
             {/* {track.doc.path} */}
             {/* <audio
               src={decodeURIComponent(convertFileSrc(track.doc.path))}
