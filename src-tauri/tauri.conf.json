@@ -1,0 +1,73 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+  "build": {
+    "beforeBuildCommand": "yarn build",
+    "beforeDevCommand": "yarn dev",
+    "devPath": "http://localhost:3000",
+    "distDir": "../dist"
+  },
+  "package": {
+    "productName": "Museeks",
+    "version": "0.20.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": true,
+      "protocol": {
+        "all": true,
+        "asset": true,
+        "assetScope": ["*"]
+      }
+    },
+    "bundle": {
+      "active": true,
+      "category": "Music",
+      "copyright": "Pierre de la Martinière <pierre.de.la.martiniere@gmail.com>",
+      "externalBin": [],
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "identifier": "io.museeks.app",
+      "shortDescription": "A simple, clean and cross-platform music player",
+      "resources": [],
+      "targets": "all",
+      "macOS": {
+        "entitlements": null,
+        "exceptionDomain": "",
+        "frameworks": [],
+        "providerShortName": null,
+        "signingIdentity": null
+      },
+      "windows": {
+        "certificateThumbprint": null,
+        "digestAlgorithm": "sha256",
+        "timestampUrl": ""
+      },
+      "deb": {
+        "depends": []
+      }
+    },
+    "security": {
+      "csp": "default-src 'none'; img-src 'self' data:; media-src 'self' asset: https://asset.localhost; child-src 'self'; object-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.github.com; font-src 'self' data:"
+    },
+    "updater": {
+      "active": false
+    },
+    "windows": [
+      {
+        "title": "Museeks",
+        "width": 900,
+        "minWidth": 900,
+        "height": 550,
+        "minHeight": 550,
+        "visible": false,
+        "fullscreen": false,
+        "resizable": true
+      }
+    ]
+  }
+}

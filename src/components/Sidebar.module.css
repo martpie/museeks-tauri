@@ -1,0 +1,11 @@
+.sidebar {
+  grid-area: sidebar;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.bottom {
+  margin-top: auto;
+}

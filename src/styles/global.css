@@ -1,0 +1,45 @@
+:root {
+  --main-color: #459ce7;
+  --link-color: #459ce7;
+  --link-color-hover: #52afff;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  font-size: 12px;
+  font-weight: 500; /* semi-bold */
+  line-height: 1.5;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* At this level to avoid terrible impact on performance, having it more
+   * down the tree introduces a big delay when firing mousedown event */
+  user-select: none;
+}
+
+#root {
+  height: 100vh;
+  overflow: hidden;
+
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  grid-template-rows: min-content 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  grid-template-areas:
+    'header header'
+    'sidebar view';
+}
+
+* {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--main-color);
+  outline-offset: -2px;
+}

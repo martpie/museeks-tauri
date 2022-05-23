@@ -1,0 +1,4 @@
+.view {
+  grid-area: view;
+  overflow-y: auto;
+}

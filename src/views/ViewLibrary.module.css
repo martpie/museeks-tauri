@@ -1,0 +1,12 @@
+.tracks {
+  /* -webkit-user-select: none; /* SLOW THINGS DOWN! */
+}
+
+.track {
+  /* border-bottom: solid 1px blue; */
+}
+
+.track_selected {
+  background: var(--main-color);
+  color: white;
+}
