@@ -1,7 +1,7 @@
 import { Component, createSignal, For, Show } from 'solid-js';
-import { convertFileSrc } from '@tauri-apps/api/tauri';
+// import { convertFileSrc } from '@tauri-apps/api/tauri';
 
-import { tracks } from '../stores/tracks';
+import { library } from '../stores/library';
 import styles from './ViewLibrary.module.css';
 
 const ViewLibrary: Component = () => {
@@ -9,9 +9,8 @@ const ViewLibrary: Component = () => {
 
   return (
     <div class={styles.tracks}>
-      <Show when={tracks.length === 0}>Nothing here yet!</Show>
-      <div>Tracks amount: {tracks.length}</div>
-      <For each={tracks}>
+      <Show when={library.tracks.length === 0}>Nothing here yet!</Show>
+      <For each={library.tracks}>
         {(track, index) => (
           <div
             tabIndex={0}
@@ -30,7 +29,7 @@ const ViewLibrary: Component = () => {
               [styles.track_selected]: selected().has(index()),
             }}
           >
-            {track.id} {track.doc.title}
+            {track.doc.title}
             {/* {track.doc.path} */}
             {/* <audio
               src={decodeURIComponent(convertFileSrc(track.doc.path))}

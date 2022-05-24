@@ -1,13 +1,14 @@
 {
   "name": "museeks-tauri-solid",
-  "version": "0.0.0",
+  "version": "0.20.0",
   "description": "",
   "scripts": {
     "start": "vite",
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "typings:generate": "cargo test --manifest-path ./src-tauri/Cargo.toml"
   },
   "license": "MIT",
   "devDependencies": {

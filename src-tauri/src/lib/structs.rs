@@ -34,9 +34,9 @@ pub struct AppState {
  * Track
  * represent a single song, id and path should be unique
  * -------------------------------------------------------------------------- */
-#[derive(Debug, Serialize, Deserialize, Collection, TS)]
+#[derive(Debug, Clone, Serialize, Deserialize, Collection, TS)]
 #[collection(name = "tracks", views = [TracksByPath])]
-// #[ts(export)]
+#[ts(export, export_to = "../src/generated/typings/Track.ts")]
 pub struct Track {
     pub title: String,
     pub album: String,
@@ -75,8 +75,8 @@ impl CollectionViewSchema for TracksByPath {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, TS)]
-// #[ts(export)]
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[ts(export, export_to = "../src/generated/typings/NumberOf.ts")]
 pub struct NumberOf {
     pub no: Option<i16>,
     pub of: Option<i16>,
@@ -87,9 +87,9 @@ pub struct NumberOf {
  * represent a playlist, that has a name and a list of tracks
  * -------------------------------------------------------------------------- */
 
-#[derive(Debug, Serialize, Deserialize, Collection, TS)]
+#[derive(Debug, Clone, Serialize, Deserialize, Collection, TS)]
 #[collection(name = "playlists")]
-// #[ts(export)]
+#[ts(export, export_to = "../src/generated/typings/Playlist.ts")]
 pub struct Playlist {
     pub name: String,
     pub tracks: Vec<i32>, // vector of IDs
@@ -103,7 +103,7 @@ pub struct Playlist {
 // Struct helper useful to include the DB ID in addition to the actual fields
 // of a document
 #[derive(Debug, Serialize, Deserialize, TS)]
-// #[ts(export)]
+#[ts(export, export_to = "../src/generated/typings/Document.ts")]
 pub struct Document<T> {
     pub id: String,
     pub doc: T,

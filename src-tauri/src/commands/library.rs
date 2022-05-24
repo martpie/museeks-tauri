@@ -1,18 +1,14 @@
 /**
  * List of Tauri commands related to library management
  */
-use futures::stream::{self, StreamExt};
-use futures::Future;
 use id3::{Tag, TagLike};
 use std::time::Instant;
-use tauri::{api, Manager, State, Window};
+use tauri::State;
 
 use crate::constants;
-use crate::lib::db::{self, insert_track};
+use crate::lib::db;
 use crate::lib::fs_utils;
 use crate::lib::structs::{AppState, Document, NumberOf, Track};
-
-const SCAN_CONCURRENCY: usize = 32;
 
 /**
  * Scan a folder and extract all ID3 tags from it
@@ -22,7 +18,6 @@ const SCAN_CONCURRENCY: usize = 32;
 #[tauri::command]
 pub async fn scan(
     state: State<'_, AppState>,
-    window: Window,
     import_path: String,
 ) -> Result<Vec<Document<Track>>, String> {
     info!("Importing path {}", import_path);
@@ -32,7 +27,7 @@ pub async fn scan(
     let task_count = paths.len();
 
     // Let's get all tracks ID3
-    info!("Importing {} files...", task_count);
+    info!("Found {} files to be imported...", task_count);
     let id3_start_time = Instant::now();
 
     let mut tracks: Vec<Track> = vec![];
@@ -44,7 +39,11 @@ pub async fn scan(
         if result.is_ok() {
             let tags = result.unwrap();
 
-            // let test = tag.get("TPE1").and_then(|frame| frame.text_values());
+            // TODO get multiple genre and artists
+            // let test = tags.get("TPE1").and_then(|frame| frame.text_values());
+            // if let Some(artist) = tags.get("TPE1").and_then(|frame| frame.content().text_values()) {
+            //     println!("artist: {}", artist);
+            // }
 
             let track = Track {
                 title: tags.title().unwrap_or("Unkown").to_string(),
@@ -58,38 +57,26 @@ pub async fn scan(
                 path,
             };
 
-            tracks.push(track)
-            // let insertion_result = db::insert_track(&state.db.tracks, track).await;
-
-            // if insertion_result.is_err() {
-            //     warn!("Could not insert track from file {}", saved_path);
-            // }
+            tracks.push(track);
         } else {
             warn!("Failed to get ID3 tags for file {}", saved_path);
         }
     }
     let id3_duration = id3_start_time.elapsed();
-    info!("{} tracks succesfully scanned", tracks.len());
+    info!("{} tracks successfully scanned", tracks.len());
     info!("Scanned all id3 tags: {:.2?}", id3_duration);
 
     let db_start_time = Instant::now();
-    // SLOW, WHY?
-    // let scan_stream = stream::iter(tracks);
-    // let future = scan_stream.for_each_concurrent(SCAN_CONCURRENCY, |track| async {
-    for track in tracks {
-        let insertion_result = db::insert_track(&state.db.tracks, track).await;
 
-        if insertion_result.is_err() {
-            warn!("Could not insert track from file");
-        }
+    // Insert all tracks in the DB
+    let result = db::insert_track(&state.db.tracks, tracks).await;
+
+    if result.is_err() {
+        warn!("Something went wrong when inserting tracks");
+    } else {
+        let db_duration = db_start_time.elapsed();
+        info!("Succesfully inserted documents: {:.2?}", db_duration);
     }
-    // });
-
-    // Start scanning!
-    // future.await;
-
-    let db_duration = db_start_time.elapsed();
-    info!("Inserted all documents: {:.2?}", db_duration);
 
     let tracks = db::get_all_tracks(&state.db.tracks).await.unwrap();
 

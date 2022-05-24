@@ -1,7 +1,9 @@
-import { Component, createEffect, createSignal } from 'solid-js';
+import { Component } from 'solid-js';
 import * as dialog from '@tauri-apps/api/dialog';
 import { invoke } from '@tauri-apps/api/tauri';
-import { setTracks } from '../stores/tracks';
+import { setLibrary } from '../stores/library';
+import { Track } from '../generated/typings/Track';
+import { Document } from '../generated/typings/Document';
 
 const ViewSettingsLibrary: Component = () => {
   const onOpen = async () => {
@@ -21,14 +23,16 @@ const ViewSettingsLibrary: Component = () => {
     }
 
     if (folders.length > 0) {
-      const result = await invoke('scan', {
+      const result: Array<Document<Track>> = await invoke('scan', {
         importPath: folders[0], // TODO: Handle multiple dir
       });
 
       if (Array.isArray(result)) {
         alert('import done');
         console.log(result);
-        setTracks(result);
+        setLibrary({
+          rawTracks: result,
+        });
       } else {
         alert('something failed!');
       }
