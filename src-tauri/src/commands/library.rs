@@ -41,9 +41,15 @@ pub async fn scan(
 
             // TODO get multiple genre and artists
             // let test = tags.get("TPE1").and_then(|frame| frame.text_values());
-            // if let Some(artist) = tags.get("TPE1").and_then(|frame| frame.content().text_values()) {
-            //     println!("artist: {}", artist);
-            // }
+            if let Some(genres) = tags
+                .get("TCON")
+                .and_then(|frame| frame.content().text_values())
+            {
+                let test = Vec::from_iter(genres);
+                println!("genres: {:#?}", vec![test]);
+            } else {
+                println!("nah");
+            }
 
             let track = Track {
                 title: tags.title().unwrap_or("Unkown").to_string(),
