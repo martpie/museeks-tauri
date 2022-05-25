@@ -1,7 +1,7 @@
 /**
  * List of Tauri commands related to library management
  */
-use id3::{Tag, TagLike};
+use audiotags::Tag;
 use std::time::Instant;
 use tauri::State;
 
@@ -27,13 +27,13 @@ pub async fn import(
     let task_count = paths.len();
 
     // Let's get all tracks ID3
-    info!("Found {} files to be imported...", task_count);
+    info!("Importing ID3 tags from {} files", task_count);
     let id3_start_time = Instant::now();
 
     let mut tracks: Vec<Track> = vec![];
 
     for path in paths {
-        let result = Tag::read_from_path(&path);
+        let result = Tag::new().read_from_path(&path);
         let saved_path = path.to_string(); // Why do I need to copy this?
 
         if result.is_ok() {
@@ -41,7 +41,7 @@ pub async fn import(
 
             let track = Track {
                 title: tag.title().unwrap_or("Unknown").to_string(),
-                album: tag.album().unwrap_or("Unknown").to_string(),
+                album: tag.album_title().unwrap_or("Unknown").to_string(),
                 // TODO: polyfloyd/rust-id3/pull/85
                 artists: vec![tag.artist().unwrap_or("Unkown artist").to_string()],
                 // TODO: polyfloyd/rust-id3/pull/85
@@ -49,11 +49,11 @@ pub async fn import(
                 year: tag.year(),
                 duration: tag.duration().unwrap_or(0),
                 track: NumberOf {
-                    no: tag.track(),
+                    no: tag.track_number(),
                     of: tag.total_tracks(),
                 },
                 disk: NumberOf {
-                    no: tag.disc(),
+                    no: tag.disc_number(),
                     of: tag.total_discs(),
                 },
                 path,
@@ -61,7 +61,11 @@ pub async fn import(
 
             tracks.push(track);
         } else {
-            warn!("Failed to get ID3 tags for file {}", saved_path);
+            warn!(
+                "Failed to get ID3 tags: \"{}\". File {}",
+                result.err().unwrap(),
+                saved_path
+            );
         }
     }
     let id3_duration = id3_start_time.elapsed();

@@ -78,8 +78,8 @@ impl CollectionViewSchema for TracksByPath {
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[ts(export, export_to = "../src/generated/typings/NumberOf.ts")]
 pub struct NumberOf {
-    pub no: Option<u32>,
-    pub of: Option<u32>,
+    pub no: Option<u16>,
+    pub of: Option<u16>,
 }
 
 /** ----------------------------------------------------------------------------
