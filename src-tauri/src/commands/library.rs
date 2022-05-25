@@ -16,7 +16,7 @@ use crate::lib::structs::{AppState, Document, NumberOf, Track};
  * TODO: Make it accept a Vector of String instead
  */
 #[tauri::command]
-pub async fn scan(
+pub async fn import(
     state: State<'_, AppState>,
     import_path: String,
 ) -> Result<Vec<Document<Track>>, String> {
@@ -37,29 +37,25 @@ pub async fn scan(
         let saved_path = path.to_string(); // Why do I need to copy this?
 
         if result.is_ok() {
-            let tags = result.unwrap();
-
-            // TODO get multiple genre and artists
-            // let test = tags.get("TPE1").and_then(|frame| frame.text_values());
-            if let Some(genres) = tags
-                .get("TCON")
-                .and_then(|frame| frame.content().text_values())
-            {
-                let test = Vec::from_iter(genres);
-                println!("genres: {:#?}", vec![test]);
-            } else {
-                println!("nah");
-            }
+            let tag = result.unwrap();
 
             let track = Track {
-                title: tags.title().unwrap_or("Unkown").to_string(),
-                album: tags.album().unwrap_or("Unknown").to_string(),
-                artists: vec![tags.artist().unwrap_or("Unkown artist").to_string()], // TODO: multiple artists here
-                genre: vec![(tags.genre().unwrap_or("").to_string())], // TODO: multiple genres here
-                year: tags.year(),
-                duration: tags.duration().unwrap_or(0),
-                track: NumberOf { no: None, of: None },
-                disk: NumberOf { no: None, of: None },
+                title: tag.title().unwrap_or("Unknown").to_string(),
+                album: tag.album().unwrap_or("Unknown").to_string(),
+                // TODO: polyfloyd/rust-id3/pull/85
+                artists: vec![tag.artist().unwrap_or("Unkown artist").to_string()],
+                // TODO: polyfloyd/rust-id3/pull/85
+                genre: vec![(tag.genre().unwrap_or("").to_string())],
+                year: tag.year(),
+                duration: tag.duration().unwrap_or(0),
+                track: NumberOf {
+                    no: tag.track(),
+                    of: tag.total_tracks(),
+                },
+                disk: NumberOf {
+                    no: tag.disc(),
+                    of: tag.total_discs(),
+                },
                 path,
             };
 

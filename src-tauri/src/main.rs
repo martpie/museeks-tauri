@@ -3,10 +3,10 @@
     windows_subsystem = "windows"
 )]
 
-use simple_logger;
-
 #[macro_use]
 extern crate log;
+
+use simple_logger;
 
 mod commands;
 mod constants;
@@ -26,7 +26,7 @@ async fn main() {
     tauri::Builder::default()
         .manage(lib::structs::AppState { db })
         .invoke_handler(tauri::generate_handler![
-            commands::library::scan,
+            commands::library::import,
             commands::library::get_tracks,
             commands::window::show_main_window,
         ])
