@@ -1,7 +1,7 @@
 /**
  * List of Tauri commands related to library management
  */
-use audiotags::Tag;
+use audiotags2::Tag;
 use std::time::Instant;
 use tauri::State;
 
@@ -45,9 +45,9 @@ pub async fn import(
                 // TODO: polyfloyd/rust-id3/pull/85
                 artists: vec![tag.artist().unwrap_or("Unkown artist").to_string()],
                 // TODO: polyfloyd/rust-id3/pull/85
-                genre: vec![(tag.genre().unwrap_or("").to_string())],
+                genres: vec![(tag.genre().unwrap_or("").to_string())],
                 year: tag.year(),
-                duration: tag.duration().unwrap_or(0),
+                duration: tag.duration().unwrap_or(0.0), // TODO: should we find a better way?
                 track: NumberOf {
                     no: tag.track_number(),
                     of: tag.total_tracks(),

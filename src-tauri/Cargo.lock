@@ -204,23 +204,24 @@ dependencies = [
 ]
 
 [[package]]
-name = "audiotags"
-version = "0.2.7182"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b87d111118f42416bb5f13c5dd2e2d879925964702a435be711d4f78fa9ce6d8"
-dependencies = [
- "audiotags-dev-macro",
- "id3 0.5.3",
- "metaflac",
- "mp4ameta",
- "thiserror",
-]
-
-[[package]]
 name = "audiotags-dev-macro"
 version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3b79298591161f312f06327df7963063ee07466be303dcc3084a44ec293cb36e"
+
+[[package]]
+name = "audiotags2"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "82ccbac1b935059501f5b33413984e8aec046cd5956152d25f468159501f16ab"
+dependencies = [
+ "audiotags-dev-macro",
+ "id3",
+ "metaflac",
+ "mp4ameta",
+ "readme-rustdocifier",
+ "thiserror",
+]
 
 [[package]]
 name = "autocfg"
@@ -1575,17 +1576,6 @@ dependencies = [
 
 [[package]]
 name = "id3"
-version = "0.5.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8cb37ae5aa60d57c5f3412df1f3e5a48a978804f4a7e70700bb5f97e8f1a6331"
-dependencies = [
- "bitflags",
- "byteorder",
- "flate2",
-]
-
-[[package]]
-name = "id3"
 version = "1.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "10c0a3ede7031127504eb067a2656b0e34db47536f6f6a429f541155ed200ff9"
@@ -1937,9 +1927,9 @@ dependencies = [
 
 [[package]]
 name = "mp4ameta"
-version = "0.6.1"
+version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1ef7a2ba51feaa9e7be2209b6e5d7472d08427ef0ce88616ed93c66dae9601b2"
+checksum = "eb23d62e8eb5299a3f79657c70ea9269eac8f6239a76952689bcd06a74057e81"
 dependencies = [
  "lazy_static",
  "mp4ameta_proc",
@@ -1947,18 +1937,18 @@ dependencies = [
 
 [[package]]
 name = "mp4ameta_proc"
-version = "0.1.1"
+version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "64ae83441f6b67e3b7f009295618e90f03228b0f1a149f56ee8cd0f6bb5602c5"
+checksum = "07dcca13d1740c0a665f77104803360da0bdb3323ecce2e93fa2c959a6d52806"
 
 [[package]]
 name = "museeks"
 version = "0.20.0"
 dependencies = [
- "audiotags",
+ "audiotags2",
  "bonsaidb",
  "futures",
- "id3 1.0.3",
+ "id3",
  "log",
  "serde",
  "serde_json",
@@ -2747,6 +2737,12 @@ checksum = "b800beb9b6e7d2df1fe337c9e3d04e3af22a124460fb4c30fcc22c9117cefb41"
 dependencies = [
  "cty",
 ]
+
+[[package]]
+name = "readme-rustdocifier"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "08ad765b21a08b1a8e5cdce052719188a23772bcbefb3c439f0baaf62c56ceac"
 
 [[package]]
 name = "redox_syscall"

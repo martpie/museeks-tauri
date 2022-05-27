@@ -46,9 +46,7 @@ pub async fn insert_track<C: AsyncConnection>(
 
     info!("Splitting tracks in {} batches", batches.len());
 
-    for (index, batch) in batches.iter().enumerate() {
-        info!("Trying to insert batch {}", index);
-
+    for batch in batches {
         let mut tx = Transaction::new();
 
         for track in batch {

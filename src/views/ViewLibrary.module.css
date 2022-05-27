@@ -3,10 +3,39 @@
 }
 
 .track {
+  display: flex;
   /* border-bottom: solid 1px blue; */
 }
 
-.track_selected {
+.trackSelected {
   background: var(--main-color);
   color: white;
+}
+
+.cell {
+  padding: 3px 4px;
+  cursor: default;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 24px;
+}
+
+.cellTrackPlaying {
+  width: 30px;
+  text-align: center;
+}
+
+.cellTrack {
+  flex: 1;
+}
+
+.cellDuration {
+  width: 7%;
+}
+
+.cellArtist,
+.cellAlbum,
+.cellGenre {
+  width: 20%;
 }

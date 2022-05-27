@@ -5,7 +5,7 @@ import { library } from '../stores/library';
 import styles from './ViewLibrary.module.css';
 
 const ViewLibrary: Component = () => {
-  const [selected, setSelected] = createSignal<Set<Number>>(new Set());
+  const [selected, setSelected] = createSignal<Set<string>>(new Set());
 
   return (
     <div class={styles.tracks}>
@@ -15,21 +15,41 @@ const ViewLibrary: Component = () => {
           <div
             tabIndex={0}
             onPointerDown={(e) => {
+              // TODO: events modifiers (cmd, shift, etc)
               e.preventDefault();
-              if (selected().has(index())) {
-                setSelected((prev) => {
-                  return new Set([...prev].filter((x) => x !== index()));
-                });
-              } else {
-                setSelected((prev) => new Set(prev).add(index()));
-              }
+
+              setSelected(() => {
+                return new Set([track.id]);
+              });
+              // if (selected().has(index())) {
+              //   setSelected((prev) => {
+              //     return new Set([...prev].filter((x) => x !== index()));
+              //   });
+              // } else {
+              //   setSelected((prev) => new Set(prev).add(index()));
+              // }
             }}
             classList={{
               [styles.track]: true,
-              [styles.track_selected]: selected().has(index()),
+              [styles.trackSelected]: selected().has(track.id),
             }}
           >
-            {track.doc.title}
+            <div class={`${styles.cell} ${styles.cellTrackPlaying}`} />
+            <div class={`${styles.cell} ${styles.cellArtist}`}>
+              {track.doc.title}
+            </div>
+            <div class={`${styles.cell} ${styles.cellDuration}`}>
+              {track.doc.duration}
+            </div>
+            <div class={`${styles.cell} ${styles.cellArtist}`}>
+              {track.doc.artists.join(', ')}
+            </div>
+            <div class={`${styles.cell} ${styles.cellAlbum}`}>
+              {track.doc.album}
+            </div>
+            <div class={`${styles.cell} ${styles.cellGenre}`}>
+              {track.doc.genres.join(', ')}
+            </div>
             {/* {track.doc.path} */}
             {/* <audio
               src={decodeURIComponent(convertFileSrc(track.doc.path))}
