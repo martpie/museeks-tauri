@@ -47,6 +47,7 @@ pub struct Track {
     pub track: NumberOf,
     pub disk: NumberOf,
     pub path: String,
+    pub metas: TrackMetas,
 }
 
 #[derive(Debug, Clone, View)]
@@ -82,6 +83,16 @@ pub struct NumberOf {
     pub of: Option<u16>,
 }
 
+// Used to store some data useful for search, sorting and filtering
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[ts(export, export_to = "../src/generated/typings/TrackMetas.ts")]
+pub struct TrackMetas {
+    pub title: String,
+    pub album: String,
+    pub artists: Vec<String>,
+    pub genres: String,
+}
+
 /** ----------------------------------------------------------------------------
  * Playlist
  * represent a playlist, that has a name and a list of tracks
@@ -92,7 +103,7 @@ pub struct NumberOf {
 #[ts(export, export_to = "../src/generated/typings/Playlist.ts")]
 pub struct Playlist {
     pub name: String,
-    pub tracks: Vec<i32>, // vector of IDs
+    pub tracks: Vec<String>, // vector of IDs
     pub import_path: String,
 }
 
@@ -108,3 +119,10 @@ pub struct Document<T> {
     pub id: String,
     pub doc: T,
 }
+
+// #[derive(Debug, Serialize, Deserialize, TS)]
+// #[ts(export, export_to = "../src/generated/typings/Document.ts")]
+// pub struct Document {
+//     pub id: String,
+//     pub doc: T,
+// }

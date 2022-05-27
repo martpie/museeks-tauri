@@ -2,13 +2,14 @@
  * List of Tauri commands related to library management
  */
 use audiotags2::Tag;
+use diacritics::remove_diacritics;
 use std::time::Instant;
 use tauri::State;
 
 use crate::constants;
 use crate::lib::db;
 use crate::lib::fs_utils;
-use crate::lib::structs::{AppState, Document, NumberOf, Track};
+use crate::lib::structs::{AppState, Document, NumberOf, Track, TrackMetas};
 
 /**
  * Scan a folder and extract all ID3 tags from it
@@ -39,15 +40,30 @@ pub async fn import(
         if result.is_ok() {
             let tag = result.unwrap();
 
+            let title = tag.title().unwrap_or("Unknown");
+            let album = tag.album_title().unwrap_or("Unknown");
+            let artists = tag.artists().unwrap_or(vec![] as Vec<&str>);
+            // TODO: https://github.com/martpie/rust-audiotags2/issues/7
+            let genres = vec![(tag.genre().unwrap_or(""))];
+
+            let metas = TrackMetas {
+                title: remove_diacritics(title).to_ascii_lowercase(),
+                album: remove_diacritics(album).to_ascii_lowercase(),
+                artists: artists
+                    .iter()
+                    .map(|s| remove_diacritics(&s.to_ascii_lowercase()))
+                    .collect(),
+                genres: remove_diacritics(&genres.join(" ")).to_ascii_lowercase(),
+            };
+
             let track = Track {
-                title: tag.title().unwrap_or("Unknown").to_string(),
-                album: tag.album_title().unwrap_or("Unknown").to_string(),
-                // TODO: polyfloyd/rust-id3/pull/85
-                artists: vec![tag.artist().unwrap_or("Unkown artist").to_string()],
-                // TODO: polyfloyd/rust-id3/pull/85
-                genres: vec![(tag.genre().unwrap_or("").to_string())],
+                title: title.to_string(),
+                album: album.to_string(),
+                artists: artists.iter().map(|&s| s.into()).collect(),
+                genres: genres.iter().map(|&s| s.into()).collect(),
                 year: tag.year(),
-                duration: tag.duration().unwrap_or(0.0), // TODO: should we find a better way?
+                // TODO: do not read the duration tag, compute it instead
+                duration: tag.duration().unwrap_or(0.0),
                 track: NumberOf {
                     no: tag.track_number(),
                     of: tag.total_tracks(),
@@ -57,6 +73,7 @@ pub async fn import(
                     of: tag.total_discs(),
                 },
                 path,
+                metas,
             };
 
             tracks.push(track);

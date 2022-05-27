@@ -211,9 +211,9 @@ checksum = "3b79298591161f312f06327df7963063ee07466be303dcc3084a44ec293cb36e"
 
 [[package]]
 name = "audiotags2"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "82ccbac1b935059501f5b33413984e8aec046cd5956152d25f468159501f16ab"
+checksum = "06f90831db297e97a5b5c89e395498e4bc15f434ae8ea8228129a3482aa770ac"
 dependencies = [
  "audiotags-dev-macro",
  "id3",
@@ -848,6 +848,12 @@ dependencies = [
  "rustc_version 0.4.0",
  "syn",
 ]
+
+[[package]]
+name = "diacritics"
+version = "0.1.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "720807774f004a558d2b6d88e17b27a9c7cedccd541f4851446976631da2a151"
 
 [[package]]
 name = "digest"
@@ -1576,9 +1582,9 @@ dependencies = [
 
 [[package]]
 name = "id3"
-version = "1.0.3"
+version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "10c0a3ede7031127504eb067a2656b0e34db47536f6f6a429f541155ed200ff9"
+checksum = "6bc3f495a212771d169c004f3293e9ecceb032839394bb22bbbea3db62792061"
 dependencies = [
  "bitflags",
  "byteorder",
@@ -1814,9 +1820,9 @@ dependencies = [
 
 [[package]]
 name = "lru"
-version = "0.7.5"
+version = "0.7.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "32613e41de4c47ab04970c348ca7ae7382cf116625755af070b008a15516a889"
+checksum = "8015d95cb7b2ddd3c0d32ca38283ceb1eea09b4713ee380bceb942d85a244228"
 dependencies = [
  "hashbrown",
 ]
@@ -1947,8 +1953,8 @@ version = "0.20.0"
 dependencies = [
  "audiotags2",
  "bonsaidb",
+ "diacritics",
  "futures",
- "id3",
  "log",
  "serde",
  "serde_json",
@@ -2185,9 +2191,9 @@ dependencies = [
 
 [[package]]
 name = "once_cell"
-version = "1.11.0"
+version = "1.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7b10983b38c53aebdf33f542c6275b0f58a238129d00c4ae0e6fb59738d783ca"
+checksum = "7709cef83f0c1f58f666e746a08b21e0085f7440fa6a29cc194d68aac97a4225"
 
 [[package]]
 name = "opaque-debug"
@@ -2258,9 +2264,9 @@ checksum = "66282efaf214671fdff89a58ec666f465af966fa0f795c02e98d009296623b9a"
 
 [[package]]
 name = "os_info"
-version = "3.3.0"
+version = "3.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "04304d855bb5385d4b595edf0147b8e281871766b75dd4c87b2bdf3c9e5c2d19"
+checksum = "0eca3ecae1481e12c3d9379ec541b238a16f0b75c9a409942daa8ec20dbfdb62"
 dependencies = [
  "log",
  "serde",
@@ -3423,9 +3429,9 @@ dependencies = [
 
 [[package]]
 name = "tauri"
-version = "1.0.0-rc.12"
+version = "1.0.0-rc.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "073781b465bd478c86d2dded16008d8cc249fd87d8b30107b50011da307250b0"
+checksum = "495d21bdf8b7d89d8ed569b6bad19dba2c3872250ce94d4776aa525cc1551a56"
 dependencies = [
  "anyhow",
  "attohttpc",
@@ -3469,7 +3475,7 @@ dependencies = [
  "thiserror",
  "tokio",
  "url",
- "uuid 1.0.0",
+ "uuid 1.1.0",
  "webkit2gtk",
  "webview2-com",
  "windows 0.37.0",
@@ -3477,12 +3483,13 @@ dependencies = [
 
 [[package]]
 name = "tauri-build"
-version = "1.0.0-rc.9"
+version = "1.0.0-rc.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ae2a4dfb8e5d8a5a4325fda01e9ddf327db23115dce0f54a4a3f9e8f74341f28"
+checksum = "ab213cbd01c1d4bd31620f23b00f42690bd988864953069eae2bd91b7d3fdfd5"
 dependencies = [
  "anyhow",
  "cargo_toml",
+ "heck 0.4.0",
  "semver 1.0.9",
  "serde_json",
  "tauri-utils",
@@ -3507,7 +3514,7 @@ dependencies = [
  "sha2 0.10.2",
  "tauri-utils",
  "thiserror",
- "uuid 1.0.0",
+ "uuid 1.1.0",
  "walkdir",
 ]
 
@@ -3539,7 +3546,7 @@ dependencies = [
  "serde_json",
  "tauri-utils",
  "thiserror",
- "uuid 1.0.0",
+ "uuid 1.1.0",
  "webview2-com",
  "windows 0.37.0",
 ]
@@ -3556,7 +3563,7 @@ dependencies = [
  "rand 0.8.5",
  "tauri-runtime",
  "tauri-utils",
- "uuid 1.0.0",
+ "uuid 1.1.0",
  "webkit2gtk",
  "webview2-com",
  "windows 0.37.0",
@@ -3931,9 +3938,9 @@ checksum = "bc5cf98d8186244414c848017f0e2676b3fcb46807f6668a97dfe67359a3c4b7"
 
 [[package]]
 name = "uuid"
-version = "1.0.0"
+version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8cfcd319456c4d6ea10087ed423473267e1a071f3bc0aa89f80d60997843c6f0"
+checksum = "93bbc61e655a4833cf400d0d15bf3649313422fa7572886ad6dab16d79886365"
 dependencies = [
  "getrandom 0.2.6",
 ]
