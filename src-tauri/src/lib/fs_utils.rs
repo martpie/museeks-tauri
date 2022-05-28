@@ -53,12 +53,12 @@ fn is_entry_valid(
  * TODO: support multiple directories scan at once
  */
 pub fn scan_dir(path: String, allowed_extensions: &[&str]) -> Vec<String> {
-    let tracks_path = WalkDir::new(path)
+    let songs_path = WalkDir::new(path)
         .follow_links(true)
         .into_iter()
         .filter_entry(|entry| is_dir_visible(entry))
         .filter_map(|entry| is_entry_valid(entry, allowed_extensions))
         .collect();
 
-    return tracks_path;
+    return songs_path;
 }

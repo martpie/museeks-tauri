@@ -2,7 +2,7 @@ import { Component } from 'solid-js';
 import * as dialog from '@tauri-apps/api/dialog';
 import { invoke } from '@tauri-apps/api/tauri';
 import { setLibrary } from '../stores/library';
-import { Track } from '../generated/typings/Track';
+import { Song } from '../generated/typings/Song';
 import { Document } from '../generated/typings/Document';
 
 const ViewSettingsLibrary: Component = () => {
@@ -23,7 +23,7 @@ const ViewSettingsLibrary: Component = () => {
     }
 
     if (folders.length > 0) {
-      const result: Array<Document<Track>> = await invoke('import', {
+      const result: Array<Document<Song>> = await invoke('import', {
         importPath: folders[0], // TODO: Handle multiple dir
       });
 
@@ -31,7 +31,7 @@ const ViewSettingsLibrary: Component = () => {
         alert('import done');
         console.log(result);
         setLibrary({
-          rawTracks: result,
+          rawSongs: result,
         });
       } else {
         alert('something failed!');

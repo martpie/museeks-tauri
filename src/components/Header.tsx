@@ -5,7 +5,7 @@ import styles from './Header.module.css';
 const Header: Component = () => {
   return (
     <header class={styles.header} data-tauri-drag-region>
-      This is the header (controls, search, etc) (drag me to reposition me)
+      This is the header :D (controls, search, etc) (drag me to reposition me)
     </header>
   );
 };

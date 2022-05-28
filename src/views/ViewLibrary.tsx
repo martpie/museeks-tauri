@@ -1,4 +1,5 @@
 import { Component, createSignal, For, Show } from 'solid-js';
+import { smartSelect } from '../lib/utils-list';
 // import { convertFileSrc } from '@tauri-apps/api/tauri';
 
 import { library } from '../stores/library';
@@ -8,51 +9,50 @@ const ViewLibrary: Component = () => {
   const [selected, setSelected] = createSignal<Set<string>>(new Set());
 
   return (
-    <div class={styles.tracks}>
-      <Show when={library.tracks.length === 0}>Nothing here yet!</Show>
-      <For each={library.tracks}>
-        {(track, index) => (
+    <div class={styles.songs}>
+      <Show when={library.songs.length === 0}>Nothing here yet!</Show>
+      <For each={library.songs}>
+        {(song, index) => (
           <div
             tabIndex={0}
-            onPointerDown={(e) => {
-              // TODO: events modifiers (cmd, shift, etc)
+            onPointerDown={async (e) => {
+              // TODO: memo this?
               e.preventDefault();
+              e.stopImmediatePropagation();
 
-              setSelected(() => {
-                return new Set([track.id]);
-              });
-              // if (selected().has(index())) {
-              //   setSelected((prev) => {
-              //     return new Set([...prev].filter((x) => x !== index()));
-              //   });
-              // } else {
-              //   setSelected((prev) => new Set(prev).add(index()));
-              // }
+              const newSelected = await smartSelect(
+                library.songs,
+                selected(),
+                song.id,
+                e
+              );
+
+              setSelected(() => newSelected);
             }}
             classList={{
-              [styles.track]: true,
-              [styles.trackSelected]: selected().has(track.id),
+              [styles.song]: true,
+              [styles.songSelected]: selected().has(song.id),
             }}
           >
-            <div class={`${styles.cell} ${styles.cellTrackPlaying}`} />
+            <div class={`${styles.cell} ${styles.cellSongPlaying}`} />
             <div class={`${styles.cell} ${styles.cellArtist}`}>
-              {track.doc.title}
+              {song.doc.title}
             </div>
             <div class={`${styles.cell} ${styles.cellDuration}`}>
-              {track.doc.duration}
+              {song.doc.duration}
             </div>
             <div class={`${styles.cell} ${styles.cellArtist}`}>
-              {track.doc.artists.join(', ')}
+              {song.doc.artists.join(', ')}
             </div>
             <div class={`${styles.cell} ${styles.cellAlbum}`}>
-              {track.doc.album}
+              {song.doc.album}
             </div>
             <div class={`${styles.cell} ${styles.cellGenre}`}>
-              {track.doc.genres.join(', ')}
+              {song.doc.genres.join(', ')}
             </div>
-            {/* {track.doc.path} */}
+            {/* {song.doc.path} */}
             {/* <audio
-              src={decodeURIComponent(convertFileSrc(track.doc.path))}
+              src={decodeURIComponent(convertFileSrc(song.doc.path))}
               controls
             /> */}
           </div>

@@ -2,14 +2,14 @@
  * List of Tauri commands related to library management
  */
 use audiotags2::Tag;
-use diacritics::remove_diacritics;
+use secular::lower_lay_string;
 use std::time::Instant;
 use tauri::State;
 
 use crate::constants;
 use crate::lib::db;
 use crate::lib::fs_utils;
-use crate::lib::structs::{AppState, Document, NumberOf, Track, TrackMetas};
+use crate::lib::structs::{AppState, Document, NumberOf, Song, SongMetas};
 
 /**
  * Scan a folder and extract all ID3 tags from it
@@ -20,18 +20,18 @@ use crate::lib::structs::{AppState, Document, NumberOf, Track, TrackMetas};
 pub async fn import(
     state: State<'_, AppState>,
     import_path: String,
-) -> Result<Vec<Document<Track>>, String> {
+) -> Result<Vec<Document<Song>>, String> {
     info!("Importing path {}", import_path);
 
-    let paths = fs_utils::scan_dir(import_path, &constants::SUPPORTED_TRACKS_EXTENSIONS);
+    let paths = fs_utils::scan_dir(import_path, &constants::SUPPORTED_SONGS_EXTENSIONS);
 
     let task_count = paths.len();
 
-    // Let's get all tracks ID3
+    // Let's get all songs ID3
     info!("Importing ID3 tags from {} files", task_count);
     let id3_start_time = Instant::now();
 
-    let mut tracks: Vec<Track> = vec![];
+    let mut songs: Vec<Song> = vec![];
 
     for path in paths {
         let result = Tag::new().read_from_path(&path);
@@ -46,17 +46,14 @@ pub async fn import(
             // TODO: https://github.com/martpie/rust-audiotags2/issues/7
             let genres = vec![(tag.genre().unwrap_or(""))];
 
-            let metas = TrackMetas {
-                title: remove_diacritics(title).to_ascii_lowercase(),
-                album: remove_diacritics(album).to_ascii_lowercase(),
-                artists: artists
-                    .iter()
-                    .map(|s| remove_diacritics(&s.to_ascii_lowercase()))
-                    .collect(),
-                genres: remove_diacritics(&genres.join(" ")).to_ascii_lowercase(),
+            let metas = SongMetas {
+                title: lower_lay_string(title),
+                album: lower_lay_string(album),
+                artists: artists.iter().map(|s| lower_lay_string(&s)).collect(),
+                genres: lower_lay_string(&genres.join(" ")),
             };
 
-            let track = Track {
+            let song = Song {
                 title: title.to_string(),
                 album: album.to_string(),
                 artists: artists.iter().map(|&s| s.into()).collect(),
@@ -76,7 +73,7 @@ pub async fn import(
                 metas,
             };
 
-            tracks.push(track);
+            songs.push(song);
         } else {
             warn!(
                 "Failed to get ID3 tags: \"{}\". File {}",
@@ -86,33 +83,33 @@ pub async fn import(
         }
     }
     let id3_duration = id3_start_time.elapsed();
-    info!("{} tracks successfully scanned", tracks.len());
+    info!("{} songs successfully scanned", songs.len());
     info!("Scanned all id3 tags: {:.2?}", id3_duration);
 
     let db_start_time = Instant::now();
 
-    // Insert all tracks in the DB
-    let result = db::insert_track(&state.db.tracks, tracks).await;
+    // Insert all songs in the DB
+    let result = db::insert_song(&state.db.songs, songs).await;
 
     if result.is_err() {
-        warn!("Something went wrong when inserting tracks");
+        warn!("Something went wrong when inserting songs");
     } else {
         let db_duration = db_start_time.elapsed();
         info!("Succesfully inserted documents: {:.2?}", db_duration);
     }
 
-    let tracks = db::get_all_tracks(&state.db.tracks).await.unwrap();
+    let songs = db::get_all_songs(&state.db.songs).await.unwrap();
 
-    Ok(tracks)
+    Ok(songs)
 }
 
 #[tauri::command]
-pub async fn get_tracks(state: State<'_, AppState>) -> Result<Vec<Document<Track>>, String> {
-    let tracks = db::get_all_tracks(&state.db.tracks).await;
+pub async fn get_songs(state: State<'_, AppState>) -> Result<Vec<Document<Song>>, String> {
+    let songs = db::get_all_songs(&state.db.songs).await;
 
-    if tracks.is_err() {
-        Err("Could not load any track".to_string())
+    if songs.is_err() {
+        Err("Could not load any song".to_string())
     } else {
-        Ok(tracks.unwrap())
+        Ok(songs.unwrap())
     }
 }

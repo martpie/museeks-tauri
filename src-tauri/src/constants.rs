@@ -1,4 +1,4 @@
-pub const SUPPORTED_TRACKS_EXTENSIONS: [&str; 12] = [
+pub const SUPPORTED_SONGS_EXTENSIONS: [&str; 12] = [
     "mp3", "mp4", "aac", "m4a", "3gp", "wav", /* mp3 / mp4 */
     "ogg", "ogv", "ogm", "opus", /* Opus */
     "flac", /* Flac */

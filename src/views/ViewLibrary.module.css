@@ -1,13 +1,13 @@
-.tracks {
+.songs {
   /* -webkit-user-select: none; /* SLOW THINGS DOWN! */
 }
 
-.track {
+.song {
   display: flex;
   /* border-bottom: solid 1px blue; */
 }
 
-.trackSelected {
+.songSelected {
   background: var(--main-color);
   color: white;
 }
@@ -19,14 +19,15 @@
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: 24px;
+  cursor: default;
 }
 
-.cellTrackPlaying {
+.cellSongPlaying {
   width: 30px;
   text-align: center;
 }
 
-.cellTrack {
+.cellSong {
   flex: 1;
 }
 

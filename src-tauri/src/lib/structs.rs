@@ -12,11 +12,11 @@ use ts_rs::TS;
 
 /** ----------------------------------------------------------------------------
  * Databases
- * exposes databases for tracks and playlists
+ * exposes databases for songs and playlists
  * -------------------------------------------------------------------------- */
 #[derive(Debug)]
 pub struct DB {
-    pub tracks: AsyncDatabase,
+    pub songs: AsyncDatabase,
     pub playlists: AsyncDatabase,
 }
 
@@ -31,13 +31,13 @@ pub struct AppState {
 }
 
 /** ----------------------------------------------------------------------------
- * Track
+ * Song
  * represent a single song, id and path should be unique
  * -------------------------------------------------------------------------- */
 #[derive(Debug, Clone, Serialize, Deserialize, Collection, TS)]
-#[collection(name = "tracks", views = [TracksByPath])]
-#[ts(export, export_to = "../src/generated/typings/Track.ts")]
-pub struct Track {
+#[collection(name = "songs", views = [SongsByPath])]
+#[ts(export, export_to = "../src/generated/typings/Song.ts")]
+pub struct Song {
     pub title: String,
     pub album: String,
     pub artists: Vec<String>,
@@ -47,17 +47,17 @@ pub struct Track {
     pub track: NumberOf,
     pub disk: NumberOf,
     pub path: String,
-    pub metas: TrackMetas,
+    pub metas: SongMetas,
 }
 
 #[derive(Debug, Clone, View)]
-#[view(collection = Track, key = String, value = usize, name = "by-path")]
-pub struct TracksByPath;
+#[view(collection = Song, key = String, value = usize, name = "by-path")]
+pub struct SongsByPath;
 
-impl CollectionViewSchema for TracksByPath {
+impl CollectionViewSchema for SongsByPath {
     type View = Self;
 
-    fn map(&self, document: CollectionDocument<Track>) -> ViewMapResult<Self::View> {
+    fn map(&self, document: CollectionDocument<Song>) -> ViewMapResult<Self::View> {
         document
             .header
             .emit_key_and_value(document.contents.path, 1)
@@ -85,8 +85,8 @@ pub struct NumberOf {
 
 // Used to store some data useful for search, sorting and filtering
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
-#[ts(export, export_to = "../src/generated/typings/TrackMetas.ts")]
-pub struct TrackMetas {
+#[ts(export, export_to = "../src/generated/typings/SongMetas.ts")]
+pub struct SongMetas {
     pub title: String,
     pub album: String,
     pub artists: Vec<String>,
@@ -95,7 +95,7 @@ pub struct TrackMetas {
 
 /** ----------------------------------------------------------------------------
  * Playlist
- * represent a playlist, that has a name and a list of tracks
+ * represent a playlist, that has a name and a list of songs
  * -------------------------------------------------------------------------- */
 
 #[derive(Debug, Clone, Serialize, Deserialize, Collection, TS)]
@@ -103,7 +103,7 @@ pub struct TrackMetas {
 #[ts(export, export_to = "../src/generated/typings/Playlist.ts")]
 pub struct Playlist {
     pub name: String,
-    pub tracks: Vec<String>, // vector of IDs
+    pub songs: Vec<String>, // vector of IDs
     pub import_path: String,
 }
 

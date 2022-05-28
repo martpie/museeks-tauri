@@ -1,6 +1,6 @@
 use std::time::Instant;
 
-use super::structs::{Document, Playlist, Track, DB};
+use super::structs::{Document, Playlist, Song, DB};
 use bonsaidb::core::connection::{AsyncConnection, AsyncStorageConnection};
 use bonsaidb::core::schema::SerializedCollection;
 use bonsaidb::core::transaction::{Operation, Transaction};
@@ -14,43 +14,43 @@ const INSERTION_BATCH: usize = 100;
  */
 pub async fn init() -> Result<DB, bonsaidb::core::Error> {
     let storage_configuration = StorageConfiguration::new("main.bonsaidb")
-        .with_schema::<Track>()?
+        .with_schema::<Song>()?
         .with_schema::<Playlist>()?;
 
     let storage = AsyncStorage::open(storage_configuration).await?;
 
-    let db_tracks = storage.create_database::<Track>("tracks", true).await?;
+    let db_songs = storage.create_database::<Song>("songs", true).await?;
     let db_playlists = storage
         .create_database::<Playlist>("playlists", true)
         .await?;
 
     Ok(DB {
-        tracks: db_tracks,
+        songs: db_songs,
         playlists: db_playlists,
     })
 }
 
 /**
- * Insert a new track in the DB, will fail in case there is a duplicate unique
- * key (like track.path)
+ * Insert a new song in the DB, will fail in case there is a duplicate unique
+ * key (like song.path)
  *
  * Doc: https://github.com/khonsulabs/bonsaidb/blob/main/examples/basic-local/examples/basic-local-multidb.rs
  */
-pub async fn insert_track<C: AsyncConnection>(
+pub async fn insert_song<C: AsyncConnection>(
     connection: &C,
-    tracks: Vec<Track>,
+    songs: Vec<Song>,
 ) -> Result<(), bonsaidb::core::Error> {
     // BonsaiDB does not work well (as of today) with a lot of very small
-    // insertions, so let's insert tracks by batch instead then
-    let batches: Vec<Vec<Track>> = tracks.chunks(INSERTION_BATCH).map(|x| x.to_vec()).collect();
+    // insertions, so let's insert songs by batch instead then
+    let batches: Vec<Vec<Song>> = songs.chunks(INSERTION_BATCH).map(|x| x.to_vec()).collect();
 
-    info!("Splitting tracks in {} batches", batches.len());
+    info!("Splitting songs in {} batches", batches.len());
 
     for batch in batches {
         let mut tx = Transaction::new();
 
-        for track in batch {
-            tx.push(Operation::push_serialized::<Track>(&track)?);
+        for song in batch {
+            tx.push(Operation::push_serialized::<Song>(&song)?);
         }
 
         // Let's goooo
@@ -60,28 +60,28 @@ pub async fn insert_track<C: AsyncConnection>(
     Ok(())
 }
 
-pub async fn get_all_tracks<C: AsyncConnection>(
+pub async fn get_all_songs<C: AsyncConnection>(
     connection: &C,
-) -> Result<Vec<Document<Track>>, bonsaidb::core::Error> {
+) -> Result<Vec<Document<Song>>, bonsaidb::core::Error> {
     let start_time = Instant::now();
 
-    let collection = connection.collection::<Track>();
+    let collection = connection.collection::<Song>();
     let docs = collection.all().await?;
 
-    let mut tracks = vec![];
+    let mut songs = vec![];
 
     for doc in docs {
-        let deserialized = Track::document_contents(&doc)?;
+        let deserialized = Song::document_contents(&doc)?;
         let parsed_document = Document {
             id: doc.header.id.to_string(),
             doc: deserialized,
         };
 
-        tracks.push(parsed_document);
+        songs.push(parsed_document);
     }
 
     let duration = start_time.elapsed();
-    info!("Got all tracks in {:.2?}", duration);
+    info!("Got all songs in {:.2?}", duration);
 
-    Ok(tracks)
+    Ok(songs)
 }

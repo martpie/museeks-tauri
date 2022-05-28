@@ -51,7 +51,7 @@ pub fn get_initial_menu() -> Menu {
             "View",
             Menu::new()
                 // TODO:
-                // - jump to track
+                // - jump to song
                 // - separator
                 // - go to library
                 // - go to playlists

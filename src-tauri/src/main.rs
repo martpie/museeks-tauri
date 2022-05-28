@@ -27,7 +27,7 @@ async fn main() {
         .manage(lib::structs::AppState { db })
         .invoke_handler(tauri::generate_handler![
             commands::library::import,
-            commands::library::get_tracks,
+            commands::library::get_songs,
             commands::window::show_main_window,
         ])
         .menu(integrations::menu::get_initial_menu())

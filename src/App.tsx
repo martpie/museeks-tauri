@@ -21,16 +21,22 @@ const App: Component = () => {
   // Once the app has loaded, let's show the window
   onMount(async () => {
     invoke('show_main_window');
-    let tracks: any[] = await invoke('get_tracks');
+    let songs: any[] = await invoke('get_songs');
 
     setLibrary({
-      rawTracks: tracks,
+      rawSongs: songs,
     });
   });
 
   return (
     <ErrorBoundary
-      fallback={(err) => <div>Something went wrong: {err.toString()}</div>}
+      fallback={(err) => (
+        <div>
+          Something went wrong: {err.toString()}
+          <br />
+          {err.stack}
+        </div>
+      )}
     >
       <Router source={hashIntegration()}>
         <Header />
