@@ -1,0 +1,12 @@
+.sidebarItem {
+  display: block;
+  border-radius: var(--border-radius);
+  color: var(--text);
+  padding: 4px 8px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.active {
+  background-color: var(--sidebar-item-active-bg);
+}

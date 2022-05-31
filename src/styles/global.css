@@ -4,20 +4,23 @@
   --link-color-hover: #52afff;
 }
 
-body {
-  margin: 0;
-  overflow: hidden;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+html {
   font-size: 12px;
   line-height: 1.5;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
   /* At this level to avoid terrible impact on performance, having it more
-   * down the tree introduces a big delay when firing mousedown event */
+ * down the tree introduces a big delay when firing mousedown event */
   user-select: none;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
 }
 
 #root {

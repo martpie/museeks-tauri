@@ -38,7 +38,8 @@ const App: Component = () => {
         <Sidebar />
         <main class={styles.view}>
           <Routes>
-            <Route path='/' element={<ViewLibrary />} />
+            <Route path='/' element={<Navigate href={() => 'library'} />} />
+            <Route path='/library' element={<ViewLibrary />} />
             <Route path='/settings'>
               <Route path='/' element={<Navigate href={() => 'library'} />} />
               <Route path='/library' element={<ViewSettingsLibrary />} />

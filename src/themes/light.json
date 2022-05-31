@@ -33,7 +33,7 @@
     "--progress-bg": "rgb(219, 219, 219)",
 
     "--sidebar-bg": "#F4F4F4",
-    "--sidebar-item-active-bg": "#E6E6E6",
+    "--sidebar-item-active-bg": "#DDDDDD",
 
     "--search-bg": "white",
     "--slider-bg": "#DADADA",

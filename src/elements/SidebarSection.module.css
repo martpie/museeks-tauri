@@ -1,0 +1,10 @@
+.sidebarSection + .sidebarSection {
+  margin-top: 16px;
+}
+
+.heading {
+  margin: 0;
+  font-weight: bold;
+  font-size: 0.875rem;
+  margin-bottom: 6px;
+}

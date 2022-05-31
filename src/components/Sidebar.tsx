@@ -1,7 +1,7 @@
-import { NavLink } from 'solid-app-router';
 import { Component } from 'solid-js';
 
-import Separator from '../elements/Separator';
+import SidebarSection from '../elements/SidebarSection';
+import SidebarItem from '../elements/SidebarItem';
 
 import styles from './Sidebar.module.css';
 
@@ -12,13 +12,18 @@ import styles from './Sidebar.module.css';
 const Sidebar: Component = () => {
   return (
     <aside class={styles.sidebar}>
-      <NavLink href='/'>Songs</NavLink>
-      <Separator />
-      <NavLink href='/playlists/1'>Playlist 1</NavLink>
-      <NavLink href='/playlists/2'>Playlist 2</NavLink>
-      <NavLink href='/settings' class={styles.bottom}>
-        to settings
-      </NavLink>
+      <SidebarSection label='Library'>
+        <SidebarItem href='/library'>Songs</SidebarItem>
+      </SidebarSection>
+
+      <SidebarSection label='Playlists'>
+        <SidebarItem href='/playlists/1'>Chill</SidebarItem>
+        <SidebarItem href='/playlists/2'>Partyyyy</SidebarItem>
+      </SidebarSection>
+
+      <div class={styles.bottom}>
+        <SidebarItem href='/settings'>Settings</SidebarItem>
+      </div>
     </aside>
   );
 };
