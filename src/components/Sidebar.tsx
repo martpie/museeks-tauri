@@ -1,6 +1,8 @@
 import { NavLink } from 'solid-app-router';
 import { Component } from 'solid-js';
 
+import Separator from '../elements/Separator';
+
 import styles from './Sidebar.module.css';
 
 /**
@@ -11,6 +13,7 @@ const Sidebar: Component = () => {
   return (
     <aside class={styles.sidebar}>
       <NavLink href='/'>Songs</NavLink>
+      <Separator />
       <NavLink href='/playlists/1'>Playlist 1</NavLink>
       <NavLink href='/playlists/2'>Playlist 2</NavLink>
       <NavLink href='/settings' class={styles.bottom}>

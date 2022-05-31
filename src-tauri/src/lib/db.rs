@@ -1,4 +1,4 @@
-use std::time::Instant;
+use crate::lib::time_logger::TimeLogger;
 
 use super::structs::{Document, Playlist, Song, DB};
 use bonsaidb::core::connection::{AsyncConnection, AsyncStorageConnection};
@@ -63,7 +63,7 @@ pub async fn insert_song<C: AsyncConnection>(
 pub async fn get_all_songs<C: AsyncConnection>(
     connection: &C,
 ) -> Result<Vec<Document<Song>>, bonsaidb::core::Error> {
-    let start_time = Instant::now();
+    let timer = TimeLogger::new("Got all songs".into());
 
     let collection = connection.collection::<Song>();
     let docs = collection.all().await?;
@@ -80,8 +80,7 @@ pub async fn get_all_songs<C: AsyncConnection>(
         songs.push(parsed_document);
     }
 
-    let duration = start_time.elapsed();
-    info!("Got all songs in {:.2?}", duration);
+    timer.complete();
 
     Ok(songs)
 }

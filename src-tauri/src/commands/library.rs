@@ -3,13 +3,13 @@
  */
 use audiotags2::Tag;
 use secular::lower_lay_string;
-use std::time::Instant;
 use tauri::State;
 
 use crate::constants;
 use crate::lib::db;
 use crate::lib::fs_utils;
 use crate::lib::structs::{AppState, Document, NumberOf, Song, SongMetas};
+use crate::lib::time_logger::TimeLogger;
 
 /**
  * Scan a folder and extract all ID3 tags from it
@@ -29,7 +29,7 @@ pub async fn import(
 
     // Let's get all songs ID3
     info!("Importing ID3 tags from {} files", task_count);
-    let id3_start_time = Instant::now();
+    let scan_logger = TimeLogger::new("Scanned all id3 tags".into());
 
     let mut songs: Vec<Song> = vec![];
 
@@ -82,11 +82,11 @@ pub async fn import(
             );
         }
     }
-    let id3_duration = id3_start_time.elapsed();
-    info!("{} songs successfully scanned", songs.len());
-    info!("Scanned all id3 tags: {:.2?}", id3_duration);
 
-    let db_start_time = Instant::now();
+    info!("{} songs successfully scanned", songs.len());
+    scan_logger.complete();
+
+    let db_insert_logger = TimeLogger::new("Scanned all id3 tags".into());
 
     // Insert all songs in the DB
     let result = db::insert_song(&state.db.songs, songs).await;
@@ -94,8 +94,7 @@ pub async fn import(
     if result.is_err() {
         warn!("Something went wrong when inserting songs");
     } else {
-        let db_duration = db_start_time.elapsed();
-        info!("Succesfully inserted documents: {:.2?}", db_duration);
+        db_insert_logger.complete();
     }
 
     let songs = db::get_all_songs(&state.db.songs).await.unwrap();

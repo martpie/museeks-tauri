@@ -15,17 +15,12 @@ import Header from './components/Header';
 
 import styles from './App.module.css';
 import ViewPlaylist from './views/ViewPlaylist';
-import { setLibrary } from './stores/library';
+import * as AppActions from './actions/ActionsApp';
 
 const App: Component = () => {
   // Once the app has loaded, let's show the window
   onMount(async () => {
-    invoke('show_main_window');
-    let songs: any[] = await invoke('get_songs');
-
-    setLibrary({
-      rawSongs: songs,
-    });
+    AppActions.init();
   });
 
   return (

@@ -25,7 +25,7 @@ walkdir = "2.3.2"
 futures = "0.3.21"
 tokio = { version = "1.18.2", features = ["full"] }
 bonsaidb = { version = "0.4.1", features = ["local", "local-async"] }
-ts-rs = "6.1.2"
+ts-rs = "6.2.0"
 secular = "1.0.1"
 
 [features]

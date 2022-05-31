@@ -4,6 +4,8 @@
   flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
+  padding: 10px;
+  border-right: solid 1px var(--border-color);
 }
 
 .bottom {

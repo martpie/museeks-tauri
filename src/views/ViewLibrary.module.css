@@ -4,16 +4,31 @@
 
 .song {
   display: flex;
-  /* border-bottom: solid 1px blue; */
-}
+  border: solid 1px transparent;
+  border-right: none;
+  border-left: none;
 
-.songSelected {
-  background: var(--main-color);
-  color: white;
+  &:nth-child(odd) {
+    background-color: var(--tracks-bg-odd);
+  }
+
+  &:nth-child(even) {
+    background-color: var(--tracks-bg-even);
+  }
+
+  &.songSelected {
+    background: var(--main-color);
+    color: white;
+
+    & + .songSelected {
+      border-top-color: rgba(255, 255, 255, 0.2);
+    }
+  }
 }
 
 .cell {
-  padding: 3px 4px;
+  padding: 2px 4px; /* 3px if we don't make use of the border */
+  /* padding: 0px 4px; */
   cursor: default;
   white-space: nowrap;
   overflow: hidden;

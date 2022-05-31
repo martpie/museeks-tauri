@@ -1,0 +1,9 @@
+.separator {
+  width: 100%;
+  height: 1px;
+  color: var(--border-color); /* TODO: Introduce a soft-border color */
+  background: var(--border-color); /* TODO: Introduce a soft-border color */
+  font-size: 0;
+  border: 0;
+  margin: 8px 0;
+}

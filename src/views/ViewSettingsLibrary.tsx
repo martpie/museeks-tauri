@@ -39,7 +39,11 @@ const ViewSettingsLibrary: Component = () => {
     }
   };
 
-  return <button onClick={onOpen}>Open</button>;
+  return (
+    <div>
+      <button onClick={onOpen}>Open</button>
+    </div>
+  );
 };
 
 export default ViewSettingsLibrary;
