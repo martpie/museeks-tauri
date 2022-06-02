@@ -73,8 +73,6 @@ export async function smartSelect(
         const min = Math.min(clickedIndex, selectedMinIndex);
         const max = Math.max(clickedIndex, selectedMaxIndex);
 
-        console.log();
-
         for (let i = min; i <= max; i++) {
           selection.add(list[i].id);
         }

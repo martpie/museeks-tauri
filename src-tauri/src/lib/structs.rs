@@ -2,6 +2,7 @@ use bonsaidb::core::document::{CollectionDocument, Emit};
 use bonsaidb::core::schema::view::CollectionViewSchema;
 use bonsaidb::core::schema::{Collection, ReduceResult, View, ViewMapResult, ViewMappedValue};
 use bonsaidb::local::AsyncDatabase;
+use home_config::HomeConfig;
 use serde::{Deserialize, Serialize};
 use ts_rs::TS;
 
@@ -28,6 +29,7 @@ pub struct DB {
 #[derive(Debug)]
 pub struct AppState {
     pub db: DB,
+    pub config: HomeConfig,
 }
 
 /** ----------------------------------------------------------------------------

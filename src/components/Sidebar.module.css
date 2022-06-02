@@ -1,14 +1,15 @@
 .sidebar {
   grid-area: sidebar;
-  background: var(--header-bg);
+  background: var(--footer-bg);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 4px 8px 8px 8px;
+  padding: 8px 12px 12px 12px;
   border-right: solid 1px var(--border-color);
 }
 
-.bottom {
+.bottomSection {
   margin-top: auto;
+  display: flex;
 }

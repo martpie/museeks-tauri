@@ -1,0 +1,7 @@
+.SongsListHeader {
+  border-bottom: 1px solid var(--border-color);
+  color: var(--tracks-header-color);
+  background-color: var(--tracks-header-bg);
+  display: flex;
+  width: 100%;
+}

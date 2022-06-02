@@ -27,6 +27,7 @@ tokio = { version = "1.18.2", features = ["full"] }
 bonsaidb = { version = "0.4.1", features = ["local", "local-async"] }
 ts-rs = "6.2.0"
 secular = "1.0.1"
+home-config = { version = "0.4.0", features = ["toml"] }
 
 [features]
 # by default Tauri runs in production mode

@@ -9,6 +9,10 @@ export type { NumberOf } from '../generated/typings/NumberOf';
 export type { Playlist } from '../generated/typings/Playlist';
 export type { Song } from '../generated/typings/Song';
 export type { SongMetas } from '../generated/typings/SongMetas';
+// export type { PlayerStatus } from '../generated/typings/PlayerStatus';
+// export type { Repeat } from '../generated/typings/Repeat';
+// export type { SortBy } from '../generated/typings/SortBy';
+// export type { SortOrder } from '../generated/typings/SortOrder';
 
 import type { Document } from '../generated/typings/Document';
 import type { Song } from '../generated/typings/Song';

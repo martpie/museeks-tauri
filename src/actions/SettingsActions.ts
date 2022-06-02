@@ -10,7 +10,7 @@ import { Theme } from '../typings/museeks';
  *
  * @param themeId The ID of the theme (defined within the theme itself)
  */
-export const setTheme = (themeId: string): void => {
+const setTheme = (themeId: string): void => {
   const theme = themes.find((theme) => theme._id === themeId);
 
   if (theme !== undefined) {
@@ -21,7 +21,7 @@ export const setTheme = (themeId: string): void => {
 /**
  * Apply theme colors to the current window
  */
-export const applyTheme = async (theme: Theme): Promise<void> => {
+const applyTheme = async (theme: Theme): Promise<void> => {
   const root = document.documentElement;
 
   Object.entries(theme.variables).forEach(([property, value]) => {
@@ -29,8 +29,16 @@ export const applyTheme = async (theme: Theme): Promise<void> => {
   });
 };
 
-export const checkTheme = async (): Promise<void> => {
+const checkTheme = async (): Promise<void> => {
   // TODO: config on back-end side
   // const theme = await ipcRenderer.invoke(channels.THEME_GET);
   // applyThemeToUI(theme);
 };
+
+const SettingsActions = {
+  setTheme,
+  applyTheme,
+  checkTheme,
+};
+
+export default SettingsActions;

@@ -1,5 +1,5 @@
 import orderBy from 'lodash-es/orderBy';
-import { Document, Sort, Song, Songs } from '../typings/museeks';
+import { Sort, Songs } from '../typings/museeks';
 
 /**
  * Filter an array of songs by string

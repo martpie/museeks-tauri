@@ -1,9 +1,9 @@
 import { Component } from 'solid-js';
 import * as dialog from '@tauri-apps/api/dialog';
 import { invoke } from '@tauri-apps/api/tauri';
-import { setLibrary } from '../stores/library';
 import { Song } from '../generated/typings/Song';
 import { Document } from '../generated/typings/Document';
+import LibraryActions from '../actions/LibraryActions';
 
 const ViewSettingsLibrary: Component = () => {
   const onOpen = async () => {
@@ -29,10 +29,7 @@ const ViewSettingsLibrary: Component = () => {
 
       if (Array.isArray(result)) {
         alert('import done');
-        console.log(result);
-        setLibrary({
-          rawSongs: result,
-        });
+        LibraryActions.setSongs(result);
       } else {
         alert('something failed!');
       }

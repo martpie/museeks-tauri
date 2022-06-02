@@ -6,7 +6,7 @@ import {
   Router,
   Routes,
 } from 'solid-app-router';
-import { invoke } from '@tauri-apps/api/tauri';
+import { invoke } from '@tauri-apps/api';
 
 import ViewLibrary from './views/ViewLibrary';
 import ViewSettingsLibrary from './views/ViewSettingsLibrary';
@@ -15,12 +15,17 @@ import Header from './components/Header';
 
 import styles from './App.module.css';
 import ViewPlaylist from './views/ViewPlaylist';
-import * as AppActions from './actions/ActionsApp';
+import AppActions from './actions/AppActions';
+import { Songs } from './typings/museeks';
+import LibraryActions from './actions/LibraryActions';
 
 const App: Component = () => {
   // Once the app has loaded, let's show the window
   onMount(async () => {
     AppActions.init();
+
+    let songs: Songs = await invoke('get_songs');
+    LibraryActions.setSongs(songs);
   });
 
   return (
@@ -33,6 +38,7 @@ const App: Component = () => {
         </div>
       )}
     >
+      {/** TODO: single store provider? */}
       <Router source={hashIntegration()}>
         <Header />
         <Sidebar />

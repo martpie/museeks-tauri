@@ -1,6 +1,7 @@
 import * as diacritics from 'diacritics';
-import { Component } from 'solid-js';
-import { library, setLibrary } from '../stores/library';
+import { Component, useContext } from 'solid-js';
+import LibraryActions from '../actions/LibraryActions';
+import { library } from '../stores/library';
 
 import styles from './Header.module.css';
 
@@ -14,9 +15,9 @@ const Header: Component = () => {
         autocomplete='off'
         value={library.search}
         onInput={(e) => {
-          setLibrary({
-            search: diacritics.remove(e.currentTarget.value.toLowerCase()),
-          });
+          LibraryActions.search(
+            diacritics.remove(e.currentTarget.value.toLowerCase())
+          );
         }}
       />
     </header>

@@ -22,9 +22,12 @@ async fn main() {
     // TODO: app path is unknown before tauri builder
     let db = lib::db::init().await.ok().unwrap();
 
+    // Config init
+    let config = lib::config::init().await;
+
     // Start Tauri
     tauri::Builder::default()
-        .manage(lib::structs::AppState { db })
+        .manage(lib::structs::AppState { db, config })
         .invoke_handler(tauri::generate_handler![
             commands::library::import,
             commands::library::get_songs,
