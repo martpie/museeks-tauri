@@ -13,9 +13,12 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* At this level to avoid terrible impact on performance, having it more
- * down the tree introduces a big delay when firing mousedown event */
+  /** At this level to avoid terrible impact on performance, having it more
+   * down the tree introduces a big delay when firing mousedown event */
   user-select: none;
+
+  /** Better font-weight for macOS */
+  font-weight: 500;
 }
 
 body {
@@ -28,12 +31,12 @@ body {
   overflow: hidden;
 
   display: grid;
-  grid-template-columns: 200px 1fr;
+  grid-template-columns: 150px 1fr;
   grid-template-rows: min-content 1fr;
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   grid-template-areas:
-    'header header'
+    'sidebar header'
     'sidebar view';
 }
 

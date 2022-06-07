@@ -1,10 +1,13 @@
 .songsList {
-  /* something */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .songs {
   /* -webkit-user-select: none; /* SLOW THINGS DOWN! */
-  /* padding: 12px; */
+  /* padding: 8px; */
+  overflow: auto;
 }
 
 .song {
@@ -54,7 +57,7 @@
 }
 
 .cellDuration {
-  width: 7%;
+  width: 8%;
   flex-shrink: 0;
 }
 

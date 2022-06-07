@@ -7,6 +7,7 @@
 extern crate log;
 
 use simple_logger;
+use tauri::Manager;
 
 mod commands;
 mod constants;
@@ -35,7 +36,9 @@ async fn main() {
         ])
         .menu(integrations::menu::get_initial_menu())
         .plugin(integrations::menu::init())
-        .setup(|_app| {
+        .setup(|app| {
+            let _handle = app.app_handle();
+
             // Nothing here yet!
             Ok(())
         })

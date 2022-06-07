@@ -1,12 +1,4 @@
-import {
-  Accessor,
-  Component,
-  createEffect,
-  createSignal,
-  For,
-  Show,
-  useContext,
-} from 'solid-js';
+import { Component, createSignal, For, Show } from 'solid-js';
 import { smartSelect } from '../lib/utils-list';
 import { library } from '../stores/library';
 

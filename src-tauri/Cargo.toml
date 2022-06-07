@@ -29,6 +29,10 @@ ts-rs = "6.2.0"
 secular = "1.0.1"
 home-config = { version = "0.4.0", features = ["toml"] }
 
+[target.'cfg(target_os = "macos")'.dependencies]
+cocoa = "0.24"
+objc = "0.2.7"
+
 [features]
 # by default Tauri runs in production mode
 # when `tauri dev` runs it is executed with `cargo run --no-default-features` if `devPath` is an URL

@@ -1976,9 +1976,11 @@ version = "0.20.0"
 dependencies = [
  "audiotags2",
  "bonsaidb",
+ "cocoa",
  "futures",
  "home-config",
  "log",
+ "objc",
  "secular",
  "serde",
  "serde_json",

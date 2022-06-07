@@ -1,6 +1,7 @@
 import * as diacritics from 'diacritics';
-import { Component, useContext } from 'solid-js';
+import { Component } from 'solid-js';
 import LibraryActions from '../actions/LibraryActions';
+import icons from '../icons/icons';
 import { library } from '../stores/library';
 
 import styles from './Header.module.css';
@@ -9,8 +10,9 @@ const Header: Component = () => {
   return (
     <header class={styles.header} data-tauri-drag-region>
       This is the header :D (controls, search, etc) (drag me to reposition me)
+      <img src={icons.PLAY} />
       <input
-        type='test'
+        type='text'
         placeholder='Search'
         autocomplete='off'
         value={library.search}
