@@ -81,8 +81,8 @@ impl CollectionViewSchema for SongsByPath {
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[ts(export, export_to = "../src/generated/typings/NumberOf.ts")]
 pub struct NumberOf {
-    pub no: Option<u16>,
-    pub of: Option<u16>,
+    pub no: Option<u32>,
+    pub of: Option<u32>,
 }
 
 // Used to store some data useful for search, sorting and filtering

@@ -1,7 +1,9 @@
 /**
  * List of Tauri commands related to library management
  */
-use audiotags2::Tag;
+// use audiotags2::Tag;
+use id3::v1v2;
+use id3::TagLike;
 use secular::lower_lay_string;
 use tauri::State;
 
@@ -34,14 +36,14 @@ pub async fn import(
     let mut songs: Vec<Song> = vec![];
 
     for path in paths {
-        let result = Tag::new().read_from_path(&path);
+        let result = v1v2::read_from_path(&path);
         let saved_path = path.to_string(); // Why do I need to copy this?
 
         if result.is_ok() {
             let tag = result.unwrap();
 
             let title = tag.title().unwrap_or("Unknown");
-            let album = tag.album_title().unwrap_or("Unknown");
+            let album = tag.album().unwrap_or("Unknown");
             let artists = tag.artists().unwrap_or(vec![] as Vec<&str>);
             // TODO: https://github.com/martpie/rust-audiotags2/issues/7
             let genres = vec![(tag.genre().unwrap_or(""))];
@@ -60,13 +62,14 @@ pub async fn import(
                 genres: genres.iter().map(|&s| s.into()).collect(),
                 year: tag.year(),
                 // TODO: do not read the duration tag, compute it instead
-                duration: tag.duration().unwrap_or(0.0),
+                duration: 0.0,
+                // duration: tag.duration().unwrap_or(0.0),
                 track: NumberOf {
-                    no: tag.track_number(),
+                    no: tag.track(),
                     of: tag.total_tracks(),
                 },
                 disk: NumberOf {
-                    no: tag.disc_number(),
+                    no: tag.disc(),
                     of: tag.total_discs(),
                 },
                 path,

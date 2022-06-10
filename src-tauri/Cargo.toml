@@ -28,6 +28,7 @@ bonsaidb = { version = "0.4.1", features = ["local", "local-async"] }
 ts-rs = "6.2.0"
 secular = "1.0.1"
 home-config = { version = "0.4.0", features = ["toml"] }
+id3 = { git = "https://github.com/polyfloyd/rust-id3", branch = "v1v2" }
 
 [target.'cfg(target_os = "macos")'.dependencies]
 cocoa = "0.24"

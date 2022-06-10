@@ -216,7 +216,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "06f90831db297e97a5b5c89e395498e4bc15f434ae8ea8228129a3482aa770ac"
 dependencies = [
  "audiotags-dev-macro",
- "id3",
+ "id3 1.1.4 (registry+https://github.com/rust-lang/crates.io-index)",
  "metaflac",
  "mp4ameta",
  "readme-rustdocifier",
@@ -1605,9 +1605,19 @@ dependencies = [
 
 [[package]]
 name = "id3"
-version = "1.1.1"
+version = "1.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dd31887804f41a3dbc0fe928325236dec06e285e8fd803fe6ddce5cacebe05b3"
+checksum = "921c34856871eaca889087e5a7bbc3b9b2309cd7d012ef27527652c234350c97"
+dependencies = [
+ "bitflags",
+ "byteorder",
+ "flate2",
+]
+
+[[package]]
+name = "id3"
+version = "1.1.4"
+source = "git+https://github.com/polyfloyd/rust-id3?branch=v1v2#60c6e9876cbcacfdaeb324ce57efecb48cd8958a"
 dependencies = [
  "bitflags",
  "byteorder",
@@ -1979,6 +1989,7 @@ dependencies = [
  "cocoa",
  "futures",
  "home-config",
+ "id3 1.1.4 (git+https://github.com/polyfloyd/rust-id3?branch=v1v2)",
  "log",
  "objc",
  "secular",
