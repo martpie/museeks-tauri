@@ -44,7 +44,7 @@ pub async fn insert_song<C: AsyncConnection>(
     // insertions, so let's insert songs by batch instead then
     let batches: Vec<Vec<Song>> = songs.chunks(INSERTION_BATCH).map(|x| x.to_vec()).collect();
 
-    info!("Splitting songs in {} batches", batches.len());
+    info!("Splitting songs in {} batche(s)", batches.len());
 
     for batch in batches {
         let mut tx = Transaction::new();

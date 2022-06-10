@@ -86,7 +86,7 @@ pub async fn import(
     info!("{} songs successfully scanned", songs.len());
     scan_logger.complete();
 
-    let db_insert_logger = TimeLogger::new("Scanned all id3 tags".into());
+    let db_insert_logger = TimeLogger::new("Inserted songs".into());
 
     // Insert all songs in the DB
     let result = db::insert_song(&state.db.songs, songs).await;
