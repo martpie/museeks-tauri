@@ -1,7 +1,9 @@
 /**
  * List of Tauri commands related to library management
  */
-use audiotags2::Tag;
+// use audiotags2::Tag;
+use lofty::Accessor;
+use lofty::AudioFile;
 use secular::lower_lay_string;
 use tauri::State;
 
@@ -34,15 +36,24 @@ pub async fn import(
     let mut songs: Vec<Song> = vec![];
 
     for path in paths {
-        let result = Tag::new().read_from_path(&path);
+        let result_file = lofty::read_from_path(&path, false);
         let saved_path = path.to_string(); // Why do I need to copy this?
 
-        if result.is_ok() {
-            let tag = result.unwrap();
+        if result_file.is_ok() {
+            let tagged_file = result_file.as_ref().unwrap();
+
+            let tag_result = tagged_file.primary_tag();
+
+            if tag_result.is_none() {
+                warn!("Failed to get primary tag\n. File {}", saved_path);
+                continue;
+            }
+
+            let tag = tag_result.unwrap();
 
             let title = tag.title().unwrap_or("Unknown");
-            let album = tag.album_title().unwrap_or("Unknown");
-            let artists = tag.artists().unwrap_or(vec![] as Vec<&str>);
+            let album = tag.album().unwrap_or("Unknown");
+            let artists = vec![tag.artist().unwrap_or("Unknown artist")];
             // TODO: https://github.com/martpie/rust-audiotags2/issues/7
             let genres = vec![(tag.genre().unwrap_or(""))];
 
@@ -58,16 +69,16 @@ pub async fn import(
                 album: album.to_string(),
                 artists: artists.iter().map(|&s| s.into()).collect(),
                 genres: genres.iter().map(|&s| s.into()).collect(),
-                year: tag.year(),
+                year: Some(0),
                 // TODO: do not read the duration tag, compute it instead
-                duration: tag.duration().unwrap_or(0.0),
+                duration: result_file.unwrap().properties().duration().as_secs_f64(),
                 track: NumberOf {
-                    no: tag.track_number(),
-                    of: tag.total_tracks(),
+                    no: None, // tag.track_number(),
+                    of: None, // tag.total_tracks(),
                 },
                 disk: NumberOf {
-                    no: tag.disc_number(),
-                    of: tag.total_discs(),
+                    no: None, // tag.disc_number(),
+                    of: None, // tag.total_discs(),
                 },
                 path,
                 metas,
@@ -77,7 +88,7 @@ pub async fn import(
         } else {
             warn!(
                 "Failed to get ID3 tags: \"{}\". File {}",
-                result.err().unwrap(),
+                result_file.err().unwrap(),
                 saved_path
             );
         }
