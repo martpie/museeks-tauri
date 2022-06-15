@@ -2,9 +2,10 @@ use bonsaidb::core::document::{CollectionDocument, Emit};
 use bonsaidb::core::schema::view::CollectionViewSchema;
 use bonsaidb::core::schema::{Collection, ReduceResult, View, ViewMapResult, ViewMappedValue};
 use bonsaidb::local::AsyncDatabase;
-use home_config::HomeConfig;
 use serde::{Deserialize, Serialize};
 use ts_rs::TS;
+
+use super::config::ConfigManager;
 
 /**
  * TODO:
@@ -29,7 +30,7 @@ pub struct DB {
 #[derive(Debug)]
 pub struct AppState {
     pub db: DB,
-    pub config: HomeConfig,
+    pub config: ConfigManager,
 }
 
 /** ----------------------------------------------------------------------------
@@ -121,10 +122,3 @@ pub struct Document<T> {
     pub id: String,
     pub doc: T,
 }
-
-// #[derive(Debug, Serialize, Deserialize, TS)]
-// #[ts(export, export_to = "../src/generated/typings/Document.ts")]
-// pub struct Document {
-//     pub id: String,
-//     pub doc: T,
-// }

@@ -5,7 +5,6 @@ import SidebarItem from '../elements/SidebarItem';
 
 import styles from './Sidebar.module.css';
 import Icon from '../elements/Icon';
-import margins from '../styles/margins';
 
 /**
  * Main navigation, allowing users to switch between different views (library,
@@ -15,9 +14,7 @@ const Sidebar: Component = () => {
   return (
     <aside class={styles.sidebar}>
       <SidebarSection label='Library'>
-        <SidebarItem href='/library'>
-          <Icon icon='music' class={margins.end4} /> Songs
-        </SidebarItem>
+        <SidebarItem href='/library'>Songs</SidebarItem>
       </SidebarSection>
 
       <SidebarSection label='Playlists'>

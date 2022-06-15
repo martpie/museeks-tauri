@@ -36,7 +36,7 @@ body {
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   grid-template-areas:
-    'sidebar header'
+    'header header'
     'sidebar view';
 }
 

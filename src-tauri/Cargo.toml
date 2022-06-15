@@ -12,27 +12,23 @@ rust-version = "1.57"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = { version = "1.0.0-rc.12", features = [] }
+tauri-build = { version = "1.0.0-rc.14", features = [] }
 
 [dependencies]
 serde_json = "1.0.81"
 serde = { version = "1.0.137", features = ["derive"] }
-tauri = { version = "1.0.0-rc.14", features = ["api-all"] }
+tauri = { version = "1.0.0-rc.16", features = ["api-all"] }
 log = "0.4.17"
 simple_logger=  { version = "2.1.0", default-features = false, features = ["colors"] }
 audiotags2 = "0.3.1"
 walkdir = "2.3.2"
 futures = "0.3.21"
-tokio = { version = "1.18.2", features = ["full"] }
+tokio = { version = "1.19.2", features = ["full"] }
 bonsaidb = { version = "0.4.1", features = ["local", "local-async"] }
 ts-rs = "6.2.0"
 secular = "1.0.1"
 home-config = { version = "0.4.0", features = ["toml"] }
 lofty = "0.6.3"
-
-[target.'cfg(target_os = "macos")'.dependencies]
-cocoa = "0.24"
-objc = "0.2.7"
 
 [features]
 # by default Tauri runs in production mode

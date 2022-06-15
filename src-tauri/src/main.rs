@@ -33,6 +33,7 @@ async fn main() {
             commands::library::import,
             commands::library::get_songs,
             commands::window::show_main_window,
+            lib::config::get_config
         ])
         .menu(integrations::menu::get_initial_menu())
         .plugin(integrations::menu::init())
