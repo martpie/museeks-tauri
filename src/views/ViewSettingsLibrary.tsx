@@ -24,7 +24,7 @@ const ViewSettingsLibrary: Component = () => {
 
     if (folders.length > 0) {
       const result: Array<Document<Song>> = await invoke('import', {
-        importPath: folders[0], // TODO: Handle multiple dir
+        importPaths: folders,
       });
 
       if (Array.isArray(result)) {

@@ -14,6 +14,8 @@ mod constants;
 mod integrations;
 mod lib;
 
+const APP_NAME: &str = "Museeks"; // TODO use app.package instead
+
 #[tokio::main]
 async fn main() {
     // Init logger
@@ -35,7 +37,7 @@ async fn main() {
             commands::window::show_main_window,
             lib::config::get_config
         ])
-        .menu(integrations::menu::get_initial_menu())
+        .menu(integrations::menu::get_initial_menu(APP_NAME))
         .plugin(integrations::menu::init())
         .setup(|app| {
             let _handle = app.app_handle();

@@ -1,29 +1,35 @@
 use tauri::{
     plugin::{Builder, TauriPlugin},
-    AboutMetadata, Menu, MenuItem, Runtime, Submenu,
+    AboutMetadata, CustomMenuItem, Menu, MenuItem, Runtime, Submenu,
 };
 
-const APP_NAME: &str = "Museeks"; // TODO use app.package instead
+/**
+ * Build menu for the app
+ * Stolen from Menu::os_default() + adaptations
+ * https://github.com/tauri-apps/tauri/blob/4f855a8a8207fed20f3b21e63585abf295b1bc71/core/tauri-runtime/src/menu.rs#L241-L312
+ */
+pub fn get_initial_menu(app_name: &str) -> Menu {
+    let mut menu = Menu::new();
 
-// #[tauri::command]
-// this will be accessible with `invoke('plugin:awesome|initialize')`.
-// where `awesome` is the plugin name.
-pub fn get_initial_menu() -> Menu {
-    let about_metadata = AboutMetadata::new()
-        .version("0.20.0") // TODO: Automate all that?
-        .authors(vec![String::from("Pierre de la Martinière")])
-        .comments(String::from("comment"))
-        .copyright(String::from("copyright"))
-        .license(String::from("MIT"))
-        .website(String::from("https://museeks.io"))
-        .website_label(String::from("website"));
+    // let about_metadata = AboutMetadata::new()
+    //     .version("0.20.0") // TODO: Automate all that?
+    //     .authors(vec![String::from("Pierre de la Martinière")])
+    //     .comments(String::from("comment"))
+    //     .copyright(String::from("copyright"))
+    //     .license(String::from("MIT"))
+    //     .website(String::from("https://museeks.io"))
+    //     .website_label(String::from("website"));
 
-    let menu = Menu::with_items([
-        Submenu::new("USELESS", Menu::new()).into(),
-        Submenu::new(
-            APP_NAME,
+    #[cfg(target_os = "macos")]
+    {
+        menu = menu.add_submenu(Submenu::new(
+            app_name,
             Menu::new()
-                .add_native_item(MenuItem::About(String::from(APP_NAME), about_metadata))
+                .add_native_item(MenuItem::About(
+                    app_name.to_string(),
+                    AboutMetadata::default(),
+                    // about_metadata,
+                ))
                 .add_native_item(MenuItem::Separator)
                 .add_native_item(MenuItem::Services)
                 .add_native_item(MenuItem::Separator)
@@ -32,52 +38,88 @@ pub fn get_initial_menu() -> Menu {
                 .add_native_item(MenuItem::ShowAll)
                 .add_native_item(MenuItem::Separator)
                 .add_native_item(MenuItem::Quit),
-        )
-        .into(),
-        Submenu::new("File", Menu::new().add_native_item(MenuItem::CloseWindow)).into(),
-        Submenu::new(
-            "Edit",
-            Menu::new()
-                .add_native_item(MenuItem::Undo)
-                .add_native_item(MenuItem::Redo)
-                .add_native_item(MenuItem::Separator)
-                .add_native_item(MenuItem::Cut)
-                .add_native_item(MenuItem::Copy)
-                .add_native_item(MenuItem::Paste)
-                .add_native_item(MenuItem::SelectAll),
-        )
-        .into(),
-        Submenu::new(
+        ));
+    }
+
+    let mut file_menu = Menu::new();
+    file_menu = file_menu.add_native_item(MenuItem::CloseWindow);
+    #[cfg(not(target_os = "macos"))]
+    {
+        file_menu = file_menu.add_native_item(MenuItem::Quit);
+    }
+    menu = menu.add_submenu(Submenu::new("File", file_menu));
+
+    #[cfg(not(target_os = "linux"))]
+    let mut edit_menu = Menu::new();
+    #[cfg(target_os = "macos")]
+    {
+        edit_menu = edit_menu.add_native_item(MenuItem::Undo);
+        edit_menu = edit_menu.add_native_item(MenuItem::Redo);
+        edit_menu = edit_menu.add_native_item(MenuItem::Separator);
+    }
+    #[cfg(not(target_os = "linux"))]
+    {
+        edit_menu = edit_menu.add_native_item(MenuItem::Cut);
+        edit_menu = edit_menu.add_native_item(MenuItem::Copy);
+        edit_menu = edit_menu.add_native_item(MenuItem::Paste);
+    }
+    #[cfg(target_os = "macos")]
+    {
+        edit_menu = edit_menu.add_native_item(MenuItem::SelectAll);
+    }
+    #[cfg(not(target_os = "linux"))]
+    {
+        menu = menu.add_submenu(Submenu::new("Edit", edit_menu));
+    }
+    #[cfg(target_os = "macos")]
+    {
+        menu = menu.add_submenu(Submenu::new(
             "View",
             Menu::new()
-                // TODO:
-                // - jump to song
-                // - separator
-                // - go to library
-                // - go to playlists
-                // - separator
-                // - reload
-                // - force reload
-                // - toggle developer tools
-                // - separator
-                // - actual size
-                // - zoom in
-                // - zoom out
-                // - actual
+                .add_item(
+                    CustomMenuItem::new("jump_to_playing_track", "Jump To Playing Track").into(),
+                )
+                .add_native_item(MenuItem::Separator)
+                .add_item(CustomMenuItem::new("go_to_library", "Go To Library").into())
+                .add_item(CustomMenuItem::new("go_to_playlists", "Go To Playlists").into())
+                .add_native_item(MenuItem::Separator)
+                .add_item(CustomMenuItem::new("reload", "Reload").into())
+                .add_item(CustomMenuItem::new("force_reload", "Force Reload").into())
+                .add_item(CustomMenuItem::new("zoom_out", "Toggle Developer Tools").into())
+                .add_native_item(MenuItem::Separator)
+                .add_item(CustomMenuItem::new("zoom_reset", "Actual Size").into())
+                .add_item(CustomMenuItem::new("zoom_in", "Zoom In").into())
+                .add_item(CustomMenuItem::new("zoom_out", "Zoom In").into())
+                .add_native_item(MenuItem::Separator)
                 .add_native_item(MenuItem::EnterFullScreen),
-        )
-        .into(),
-        Submenu::new(
-            "Window",
-            Menu::new()
-                .add_native_item(MenuItem::Minimize)
-                .add_native_item(MenuItem::Zoom),
-        )
-        .into(),
-        Submenu::new("Help", Menu::new()).into(),
-    ]);
+        ));
+    }
 
-    return menu;
+    // - jump to song
+    // - separator
+    // - go to library
+    // - go to playlists
+    // - separator
+    // - reload
+    // - force reload
+    // - toggle developer tools
+    // - separator
+    // - actual size
+    // - zoom in
+    // - zoom out
+    // - actual
+
+    let mut window_menu = Menu::new();
+    window_menu = window_menu.add_native_item(MenuItem::Minimize);
+    #[cfg(target_os = "macos")]
+    {
+        window_menu = window_menu.add_native_item(MenuItem::Zoom);
+        window_menu = window_menu.add_native_item(MenuItem::Separator);
+    }
+    window_menu = window_menu.add_native_item(MenuItem::CloseWindow);
+    menu = menu.add_submenu(Submenu::new("Window", window_menu));
+
+    menu
 }
 
 /**

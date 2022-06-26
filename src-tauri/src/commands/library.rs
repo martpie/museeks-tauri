@@ -21,11 +21,20 @@ use crate::lib::time_logger::TimeLogger;
 #[tauri::command]
 pub async fn import(
     state: State<'_, AppState>,
-    import_path: String,
+    import_paths: Vec<String>,
 ) -> Result<Vec<Document<Song>>, String> {
-    info!("Importing path {}", import_path);
+    info!("Importing paths: {}", import_paths.join(", "));
 
-    let paths = fs_utils::scan_dir(import_path, &constants::SUPPORTED_SONGS_EXTENSIONS);
+    let mut paths: Vec<String> = vec![];
+
+    for (_, import_path) in import_paths.iter().enumerate() {
+        let mut test = fs_utils::scan_dir(
+            import_path.to_string(),
+            &constants::SUPPORTED_SONGS_EXTENSIONS,
+        );
+
+        paths.append(&mut test);
+    }
 
     let task_count = paths.len();
 
@@ -69,16 +78,21 @@ pub async fn import(
                 album: album.to_string(),
                 artists: artists.iter().map(|&s| s.into()).collect(),
                 genres: genres.iter().map(|&s| s.into()).collect(),
-                year: Some(0),
+                year: tag.year(),
                 // TODO: do not read the duration tag, compute it instead
-                duration: result_file.unwrap().properties().duration().as_secs_f64(),
+                duration: result_file
+                    .as_ref()
+                    .unwrap()
+                    .properties()
+                    .duration()
+                    .as_secs_f64(),
                 track: NumberOf {
-                    no: None, // tag.track_number(),
-                    of: None, // tag.total_tracks(),
+                    no: tag.track(),
+                    of: tag.track_total(),
                 },
                 disk: NumberOf {
-                    no: None, // tag.disc_number(),
-                    of: None, // tag.total_discs(),
+                    no: tag.disk(),
+                    of: tag.disk_total(),
                 },
                 path,
                 metas,

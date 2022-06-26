@@ -45,7 +45,7 @@ pub struct Song {
     pub album: String,
     pub artists: Vec<String>,
     pub genres: Vec<String>,
-    pub year: Option<i32>,
+    pub year: Option<u32>,
     pub duration: f64,
     pub track: NumberOf,
     pub disk: NumberOf,
@@ -82,8 +82,8 @@ impl CollectionViewSchema for SongsByPath {
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[ts(export, export_to = "../src/generated/typings/NumberOf.ts")]
 pub struct NumberOf {
-    pub no: Option<u16>,
-    pub of: Option<u16>,
+    pub no: Option<u32>,
+    pub of: Option<u32>,
 }
 
 // Used to store some data useful for search, sorting and filtering

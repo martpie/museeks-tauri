@@ -1,5 +1,6 @@
 use crate::lib::time_logger::TimeLogger;
 
+use super::dirs;
 use super::structs::{Document, Playlist, Song, DB};
 use bonsaidb::core::connection::{AsyncConnection, AsyncStorageConnection};
 use bonsaidb::core::schema::SerializedCollection;
@@ -13,9 +14,11 @@ const INSERTION_BATCH: usize = 100;
  * Doc: https://github.com/khonsulabs/bonsaidb/blob/main/examples/basic-local/examples/basic-local-multidb.rs
  */
 pub async fn init() -> Result<DB, bonsaidb::core::Error> {
-    let storage_configuration = StorageConfiguration::new("main.bonsaidb")
-        .with_schema::<Song>()?
-        .with_schema::<Playlist>()?;
+    print!("{:#?}", dirs::museeks_config_dir().join("museeks.bonsaidb"));
+    let storage_configuration =
+        StorageConfiguration::new(dirs::museeks_config_dir().join("main.bonsaidb"))
+            .with_schema::<Song>()?
+            .with_schema::<Playlist>()?;
 
     let storage = AsyncStorage::open(storage_configuration).await?;
 
