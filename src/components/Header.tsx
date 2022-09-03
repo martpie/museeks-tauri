@@ -1,16 +1,16 @@
 import * as diacritics from 'diacritics';
 import { Component } from 'solid-js';
 import LibraryActions from '../actions/LibraryActions';
-import icons from '../icons/icons';
 import { library } from '../stores/library';
 
 import styles from './Header.module.css';
+import PlayerControls from './PlayerControls';
 
 const Header: Component = () => {
   return (
     <header class={styles.header} data-tauri-drag-region>
-      This is the header :D (controls, search, etc) (drag me to reposition me)
-      <img src={icons.PLAY} />
+      <PlayerControls />
+      {/* <img src={icons.PLAY} /> */}
       <input
         type='text'
         placeholder='Search'

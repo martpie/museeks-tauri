@@ -20,6 +20,7 @@ pub fn get_initial_menu(app_name: &str) -> Menu {
     //     .website(String::from("https://museeks.io"))
     //     .website_label(String::from("website"));
 
+    println!("dedieu {}", app_name);
     #[cfg(target_os = "macos")]
     {
         menu = menu.add_submenu(Submenu::new(
