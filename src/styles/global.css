@@ -7,8 +7,8 @@
 html {
   font-size: 12px;
   line-height: 1.5;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -36,8 +36,8 @@ body {
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   grid-template-areas:
-    'header header'
-    'sidebar view';
+    "header header"
+    "sidebar view";
 }
 
 * {
